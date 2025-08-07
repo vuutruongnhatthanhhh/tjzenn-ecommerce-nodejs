@@ -1,0 +1,95 @@
+//npx prisma db push
+//npx prisma generate
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  password   String
+  name       String
+  role       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  orders     Order[]
+}
+
+model Product {
+  id                     Int      @id @default(autoincrement())
+  name                   String   
+  url                    String   @unique
+  shortDescription       String
+  content                String
+  price                  Int
+  categoryId             Int?
+  category               Category?  @relation(fields: [categoryId], references: [id])
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  orderItems             OrderItem[]
+
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  Product[] 
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Blog {
+  id                     Int      @id @default(autoincrement())
+  name                   String   
+  url                    String   @unique
+  shortDescription       String
+  content                String
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+model Order {
+  id            Int         @id @default(autoincrement())
+  customerName  String
+  customerPhone String
+  customerEmail String?
+  address       String
+  total         Int
+  note          String?
+  status        String      @default("pending")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  userId        Int?
+  user          User?       @relation(fields: [userId], references: [id])
+
+  items         OrderItem[]
+}
+
+model OrderItem {
+  id            Int     @id @default(autoincrement())
+  orderId       Int
+  productId     Int?
+  productName   String
+  productImage  String?
+  quantity      Int
+  price         Int
+
+  order         Order   @relation(fields: [orderId], references: [id])
+  product       Product? @relation(fields: [productId], references: [id])
+}
+
+
+model Image {
+  id            Int         @id @default(autoincrement())
+  name          String      
+  url           String      @unique
+  category      String
+  createdAt     DateTime    @default(now())
+}
