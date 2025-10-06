@@ -16,6 +16,9 @@ model User {
   password   String
   name       String
   role       String
+  email      String?
+  address    String?
+  phone      String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -26,8 +29,9 @@ model Product {
   id                     Int      @id @default(autoincrement())
   name                   String   
   url                    String   @unique
+  image                  String?
   shortDescription       String
-  content                String
+  content                String   @db.Text
   price                  Int
   categoryId             Int?
   category               Category?  @relation(fields: [categoryId], references: [id])
@@ -49,8 +53,9 @@ model Blog {
   id                     Int      @id @default(autoincrement())
   name                   String   
   url                    String   @unique
+  image                  String?
   shortDescription       String
-  content                String
+  content                String   @db.Text
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
 }

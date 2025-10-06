@@ -106,3 +106,14 @@ export const deleteBlog = async (id: number) => {
     throw error;
   }
 };
+
+export const getLatestBlogs = async () => {
+  const blogs = await prisma.blog.findMany({
+    take: 4,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return blogs;
+};

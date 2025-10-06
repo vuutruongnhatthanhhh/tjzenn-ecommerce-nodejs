@@ -8,6 +8,7 @@ const createProductSchema = z
   .object({
     name: z.string().min(1),
     url: z.string().min(1),
+    image: z.string().min(1),
     shortDescription: z.string().min(1).optional(),
     content: z.string().min(1).optional(),
     price: z.number().nonnegative(),
@@ -19,6 +20,7 @@ const updateProductSchema = z
   .object({
     name: z.string().min(1).optional(),
     url: z.string().min(1).optional(),
+    image: z.string().min(1),
     shortDescription: z.string().min(1).optional(),
     content: z.string().min(1).optional(),
     price: z.number().nonnegative().optional(),
@@ -137,5 +139,14 @@ export const deleteProduct = async (req: Request, res: Response) => {
     return res
       .status(500)
       .json({ message: "Lỗi khi delete product", error: error.message });
+  }
+};
+
+export const getLatestProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await productService.getLatestProducts();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi lấy sản phẩm mới nhất" });
   }
 };

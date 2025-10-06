@@ -8,6 +8,7 @@ const createBlogSchema = z
   .object({
     name: z.string().min(1),
     url: z.string().min(1),
+    image: z.string().min(1),
     shortDescription: z.string().min(1),
     content: z.string().min(1),
   })
@@ -17,6 +18,7 @@ const updateBlogSchema = z
   .object({
     name: z.string().min(1).optional(),
     url: z.string().min(1).optional(),
+    image: z.string().min(1),
     shortDescription: z.string().min(1).optional(),
     content: z.string().min(1).optional(),
   })
@@ -132,5 +134,14 @@ export const deleteBlog = async (req: Request, res: Response) => {
     return res
       .status(500)
       .json({ message: "Lỗi khi delete blog", error: error.message });
+  }
+};
+
+export const getLatestBlogs = async (_req: Request, res: Response) => {
+  try {
+    const blogs = await blogService.getLatestBlogs();
+    res.json(blogs);
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi lấy blog mới nhất" });
   }
 };

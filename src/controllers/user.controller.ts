@@ -7,7 +7,10 @@ const createUserSchema = z
     username: z.string().min(1),
     password: z.string().min(6),
     name: z.string().min(1),
-    role: z.enum(["USER", "ADMIN"]),
+    role: z.enum(["USER"]),
+    email: z.string().min(1).optional(),
+    phone: z.string().min(10).optional(),
+    address: z.string().min(1).optional(),
   })
   .strict(); // Tự động bỏ field lạ (createdAt, updatedAt)
 

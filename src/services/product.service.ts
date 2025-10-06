@@ -136,3 +136,21 @@ export const deleteProduct = async (id: number) => {
     throw error;
   }
 };
+
+export const getLatestProducts = async () => {
+  const products = await prisma.product.findMany({
+    take: 5,
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      category: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  return products;
+};

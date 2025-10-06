@@ -6,16 +6,26 @@ import { authenticate, authorize } from "@/utils/authMiddleware";
 
 const router = Router();
 
-router.get("/", orderController.getOrders);
-router.get("/:id", orderController.getOrderById);
+router.get("/", authenticate, authorize("ADMIN"), orderController.getOrders);
 router.get(
-  "/user/:userId",
+  "/:id",
   authenticate,
   authorize("ADMIN"),
-  orderController.getOrdersByUser
+  orderController.getOrderById
 );
+router.get("/user/:userId", authenticate, orderController.getOrdersByUser);
 router.post("/", authenticate, orderController.createOrder);
-router.patch("/:id", orderController.updateOrder);
-router.delete("/:id", orderController.deleteOrder);
+router.patch(
+  "/:id",
+  authenticate,
+  authorize("ADMIN"),
+  orderController.updateOrder
+);
+router.delete(
+  "/:id",
+  authenticate,
+  authorize("ADMIN"),
+  orderController.deleteOrder
+);
 
 export default router;
